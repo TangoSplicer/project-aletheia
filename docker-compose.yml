@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  nexus-core:
+    build: 
+      context: ./core-nexus
+    network_mode: "none" # Mandatory Air-Gap
+    volumes:
+      - ./evidence:/evidence:ro
+      - ./reports:/reports:rw
+
+  triage-ai:
+    image: aletheia-triage-local:latest
+    network_mode: "none"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+

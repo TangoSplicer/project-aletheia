@@ -1,0 +1,20 @@
+name: Forensic Validation Gate
+
+on: [pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+      - name: Verify Core Nexus Integrity
+        run: |
+          cd core-nexus
+          cargo test --test hash_validation
+      - name: Run SRA Consistency Check
+        run: |
+          python3 validation-suite/auto_validate.py --mode gate
