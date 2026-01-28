@@ -1,0 +1,25 @@
+# Media-Synth Configuration: Forensic Defaults
+# Aligned with UK FSR Statutory Code v2
+
+jurisdiction: "UK"
+terminology: "FSR_V2"
+
+detection_thresholds:
+  rppg_confidence: 0.85
+  blink_rate_minimum: 0.1 # Blinks per second
+  blink_rate_maximum: 0.5
+  synthetic_threshold: 0.75
+
+explainability:
+  generate_heatmaps: true
+  output_format: "PDF/A"
+  signal_csv_export: true
+
+local_models:
+  face_detector: "models/face_v1.pb"
+  rppg_engine: "models/pulse_v1.pb"
+  blink_detector: "models/eye_v1.pb"
+
+legal_formatting:
+  probabilistic_language: true
+  disclaimer_required: true
