@@ -1,64 +1,95 @@
-use crate::coc_ledger::{LedgerEntry, CocLedger};
-use crate::hashing::{hash_file, HashAlgorithm};
-use crate::config::COC_LEDGER_PATH;
-use serde::{Deserialize, Serialize};
-use std::fs;
-use std::io::{self, Write};
+use crate::sra_pinning::SraPin;
+use crate::ledger::{Ledger, EventType, LedgerEntry};
+use crate::errors::ForensicError;
+use serde::Serialize;
+use sha2::{Digest, Sha256};
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct ReportMetadata {
-    pub case_reference: String,
-    pub exhibit_reference: String,
-    pub practitioner_name: String,
-    pub organization: String,
+#[derive(Serialize)]
+pub struct ForensicReport {
+    pub case_id: String,
+    pub generation_timestamp: String,
+    pub authorized_methods: Vec<MethodExhibit>,
+    pub chain_of_custody_narrative: Vec<NarrativeEvent>,
+    pub system_attestation: String,
 }
 
-pub struct ReportGenerator;
+#[derive(Serialize)]
+pub struct MethodExhibit {
+    pub artifact_name: String,
+    pub sha256_hash: String,
+    pub practitioner_id: String,
+    pub jurisdiction: String,
+    pub ledger_sequence: u64,
+}
 
-impl ReportGenerator {
-    pub fn generate_uk_report(
-        metadata: ReportMetadata,
-        module_findings: &str,
-        output_path: &str,
-    ) -> io::Result<String> {
-        // 1. Fetch Ledger entries for the Audit Trail section
-        let ledger_data = fs::read_to_string(COC_LEDGER_PATH)?;
-        let mut audit_trail = String::new();
-        for line in ledger_data.lines() {
-            let entry: LedgerEntry = serde_json::from_str(line)?;
-            audit_trail.push_str(&format!(
-                "| {} | {} | {} | {} |\n",
-                entry.timestamp, entry.event_type, entry.object_ref, entry.entry_hash
-            ));
+#[derive(Serialize)]
+pub struct NarrativeEvent {
+    pub sequence: u64,
+    pub event_type: EventType,
+    pub description: String,
+    pub hash_anchor: String,
+}
+
+pub struct ReportEngine;
+
+impl ReportEngine {
+    pub fn generate_final_report(
+        case_id: &str,
+        ledger: &mut Ledger,
+        active_pins: &[SraPin],
+    ) -> Result<ForensicReport, ForensicError> {
+        // 1. Enforcement Gate: Refuse report if no authorized methods exist
+        if active_pins.is_empty() {
+            return Err(ForensicError::IllegalState("No SRA pins detected. Reporting inhibited for unverified methods.".into()));
         }
 
-        // 2. Load Template
-        let template = fs::read_to_string("project-aletheia/reports/templates/uk_fsr_report.md")?;
-        
-        // 3. Deterministic Synthesis
-        let report_content = template
-            .replace("{{CASE_REF}}", &metadata.case_reference)
-            .replace("{{EXHIBIT_REF}}", &metadata.exhibit_reference)
-            .replace("{{PRACTITIONER}}", &metadata.practitioner_name)
-            .replace("{{ORG}}", &metadata.organization)
-            .replace("{{AUDIT_TRAIL}}", &audit_trail)
-            .replace("{{FINDINGS}}", module_findings);
+        // 2. Enumerate Authorized Methods
+        let authorized_methods: Vec<MethodExhibit> = active_pins.iter().map(|pin| {
+            let event = ledger.find_event(EventType::SRA_PINNED, &pin.artifact_name)
+                .ok_or(ForensicError::LedgerInconsistency)?;
+            
+            Ok(MethodExhibit {
+                artifact_name: pin.artifact_name.clone(),
+                sha256_hash: pin.sha256_hash.clone(),
+                practitioner_id: pin.practitioner_id.clone(),
+                jurisdiction: pin.jurisdiction.clone(),
+                ledger_sequence: event.sequence_id,
+            })
+        }).collect::<Result<Vec<_>, ForensicError>>()?;
 
-        // 4. Write to disk
-        fs::write(output_path, &report_content)?;
+        // 3. Construct Linear CoC Narrative
+        let narrative = ledger.entries().iter()
+            .filter(|e| matches!(e.event_type, 
+                EventType::SRA_PINNED | 
+                EventType::ANALYSIS_START | 
+                EventType::ANALYSIS_END))
+            .map(|e| NarrativeEvent {
+                sequence: e.sequence_id,
+                event_type: e.event_type.clone(),
+                description: e.detail.clone(),
+                hash_anchor: e.event_hash.clone(),
+            })
+            .collect();
 
-        // 5. Calculate Final Report Hash
-        let hash_result = hash_file(output_path, HashAlgorithm::Sha256)?;
+        let report = ForensicReport {
+            case_id: case_id.to_string(),
+            generation_timestamp: chrono::Utc::now().to_rfc3339(),
+            authorized_methods,
+            chain_of_custody_narrative: narrative,
+            system_attestation: "No forensic processing occurred without a pinned, practitioner-authorized method.".into(),
+        };
+
+        // 4. Ledger Sealing
+        let report_json = serde_json::to_string(&report).map_err(|_| ForensicError::SerializationFailure)?;
+        let report_hash = format!("{:x}", Sha256::digest(report_json.as_bytes()));
         
-        // 6. Record to CoC Ledger
-        CocLedger::append(
-            COC_LEDGER_PATH,
-            "REPORT_GENERATED",
-            &metadata.practitioner_name,
-            output_path,
-            &hash_result.hex_digest,
+        ledger.append(
+            EventType::REPORT_GENERATED,
+            "SYSTEM",
+            case_id,
+            &report_hash
         )?;
 
-        Ok(hash_result.hex_digest)
+        Ok(report)
     }
 }
