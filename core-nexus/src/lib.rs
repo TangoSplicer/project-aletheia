@@ -1,12 +1,42 @@
+use std::path::Path;
+use std::process::Output;
+
+pub mod sra_pinning;
+pub mod coc_ledger;
+pub mod hashing;
+pub mod ingestion;
+
+use sra_pinning::{SraPin, PinningEngine};
+use coc_ledger::CocLedger;
+
+#[derive(Debug, Clone, Copy)]
 pub enum ModelIntegrityPolicy {
     Strict,
     AuditOnly,
 }
 
+#[derive(Debug)]
+pub enum ForensicError {
+    MissingMethodAuthority,
+    IntegrityFailure(String),
+    IoError(std::io::Error),
+    ManifestMalformed,
+    IllegalState(String),
+    CryptoFailure(String),
+    SignatureMismatch,
+    JurisdictionViolation,
+}
+
+impl From<std::io::Error> for ForensicError {
+    fn from(err: std::io::Error) -> Self {
+        ForensicError::IoError(err)
+    }
+}
+
 pub struct CoreNexus {
     pub policy: ModelIntegrityPolicy,
     pub active_pins: Vec<SraPin>,
-    pub ledger: Ledger,
+    pub ledger_path: String,
 }
 
 impl CoreNexus {
@@ -19,6 +49,11 @@ impl CoreNexus {
         PinningEngine::verify_execution_integrity(artifact_path, pin, &self.policy)?;
 
         // Proceed with scan...
-        Ok(processed_results)
+        // For now, return a dummy output to satisfy the compiler
+        Ok(Output {
+            status: Default::default(),
+            stdout: Vec::new(),
+            stderr: Vec::new(),
+        })
     }
 }
