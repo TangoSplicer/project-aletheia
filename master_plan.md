@@ -28,5 +28,5 @@ Project Aletheia is an open-source digital forensics framework designed for the 
 | CoC Immutable Ledger | COMPLETE | Global |
 | media-synth Module (v1) | COMPLETE | UK (FSR-ready) |
 | Forensic Report Generator | IN PROGRESS | UK (CPS-ready) |
-| Practitioner Sealing Logic | STUBBED | UK (CrimPR-ready) |
+| Practitioner Sealing Logic | COMPLETE | UK (CrimPR-ready) |
 | SRA-Verify Utility | PENDING | - |

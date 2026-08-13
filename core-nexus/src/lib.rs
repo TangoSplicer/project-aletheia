@@ -5,6 +5,7 @@ pub mod sra_pinning;
 pub mod coc_ledger;
 pub mod hashing;
 pub mod ingestion;
+pub mod sealing;
 
 use sra_pinning::{SraPin, PinningEngine};
 use coc_ledger::CocLedger;
