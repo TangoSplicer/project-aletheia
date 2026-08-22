@@ -1,5 +1,7 @@
 # Project Aletheia: Master Architectural Plan (v1.0)
 
+> This document records the v1 architectural plan and status framing. For the sequenced, gated path beyond the frozen v1 baseline, use [ROADMAP_TO_V2.md](ROADMAP_TO_V2.md). The roadmap is a planning document and does not alter the v1 baseline or assert method validation.
+
 ## 1. Executive Summary
 Project Aletheia is an open-source digital forensics framework designed for the 2026 legal landscape. It bridges the gap between high-speed AI analysis and the strict evidentiary requirements of the UK Forensic Science Regulator (FSR) and ISO/IEC 17025.
 

@@ -25,6 +25,7 @@ The React/TypeScript **Aletheia Seal Desk** source is included in [`dashboard/`]
 | Local environment and SRA setup | [docs/ENVIRONMENT_SETUP.md](docs/ENVIRONMENT_SETUP.md) and [docs/UPDATING_SRA_LIB.md](docs/UPDATING_SRA_LIB.md) |
 | Dashboard users, operators, and reviewers | [docs/DASHBOARD_GUIDE.md](docs/DASHBOARD_GUIDE.md) |
 | Contributors and pull-request expectations | [CONTRIBUTING.md](CONTRIBUTING.md) |
+| Sequenced future development to v2 | [ROADMAP_TO_V2.md](ROADMAP_TO_V2.md) |
 | Framework-level security reporting | [SECURITY.md](SECURITY.md) |
 
 ## 🛡️ Disclosure
