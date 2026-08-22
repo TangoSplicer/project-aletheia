@@ -24,6 +24,7 @@ The application is designed to keep source evidence in the browser. It is an int
 | [OPERATIONS_AND_DEPLOYMENT.md](OPERATIONS_AND_DEPLOYMENT.md) | Administrators and deployment operators | Configuration, database migration, OAuth, production launch, recovery, and operational limits. |
 | [SECURITY.md](SECURITY.md) | Security reviewers and contributors | Trust boundaries, vulnerability reporting, and supported disclosure practices. |
 | [CHANGELOG.md](CHANGELOG.md) | Operators and developers | Consolidated feature, security, governance, and migration history. |
+| [RELEASE_POLICY.md](RELEASE_POLICY.md) | Release owners | Required CI evidence, semantic tags, release candidates, and rollback boundaries. |
 
 ## Quick start
 
@@ -60,7 +61,7 @@ An administrator opens **Approval queue** from the sidebar or the header attenti
 
 ## Repository and release posture
 
-This repository is intentionally configured for source control: dependencies, build output, local logs, secrets, and project runtime artifacts are excluded. The source is maintained in the private GitHub repository [TangoSplicer/aletheia-seal-dashboard](https://github.com/TangoSplicer/aletheia-seal-dashboard). Change visibility only after reviewing the security policy, third-party license obligations, deployment configuration, and any proprietary material you intend to publish.
+This dashboard is maintained inside [TangoSplicer/project-aletheia](https://github.com/TangoSplicer/project-aletheia) under `dashboard/`. Dependencies, build output, local logs, secrets, and runtime artifacts are excluded from source control. Consult the repository-level [dashboard guide](../docs/DASHBOARD_GUIDE.md) and [contribution guide](../CONTRIBUTING.md) before changing release or deployment posture.
 
 ## Quality gates
 

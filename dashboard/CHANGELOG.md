@@ -2,6 +2,18 @@
 
 All notable source, security, governance, and operational changes are recorded here. Dates use UTC.
 
+## Unreleased
+
+### Added
+
+- Project Aletheia dashboard quality gate for locked dependency installation, tests, TypeScript validation, and production builds.
+- Dashboard release policy defining semantic tags, release-candidate evidence, migration/security/operations review, and rollback limits.
+- Project-level dashboard documentation map and contribution guidance.
+
+### Changed
+
+- Dashboard source-control references now identify `TangoSplicer/project-aletheia/dashboard` as the maintained source location.
+
 ## [1.1.0] — 2026-08-21
 
 ### Added

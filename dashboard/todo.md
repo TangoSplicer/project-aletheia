@@ -90,3 +90,7 @@
 - [x] Add queue search/filter coverage for matching, clearing, and empty states.
 - [x] Synchronize approval queue search and filters with validated shareable URL query parameters.
 - [x] Add URL state coverage for initialization, updates, clearing, and invalid parameter fallbacks.
+- [x] Add Project Aletheia dashboard CI for locked installation, tests, TypeScript validation, and production builds.
+- [x] Add dashboard release-tag and release-candidate policy documentation.
+- [x] Add Project Aletheia dashboard operating guide and contributor navigation.
+- [x] Validate the embedded dashboard from its Project Aletheia source location.
