@@ -13,9 +13,12 @@ Project Aletheia is a 2026-specification digital forensic framework engineered t
 * **Explainable AI (XAI):** Human-in-the-loop triage for deepfake and synthetic media detection.
 * **Jurisdiction Switch:** Toggle logic and terminology between UK (FSR), USA (NIST/Daubert), and EU (AI Act).
 
+## Aletheia Seal Desk dashboard
+
+The React/TypeScript **Aletheia Seal Desk** source is included in [`dashboard/`](dashboard/). It provides local-first Ed25519 manifest verification, BLAKE3 ledger review, encrypted vault restoration, case-audit inspection, verification-profile governance, maker–checker approval controls, and an administrator approval queue. The dashboard’s [README](dashboard/README.md), [user guide](dashboard/USER_GUIDE.md), [operations runbook](dashboard/OPERATIONS_AND_DEPLOYMENT.md), and [security policy](dashboard/SECURITY.md) define its installation, security, and deployment boundaries.
+
 ## 🛡️ Disclosure
 This software is intended for use by competent forensic practitioners. All automated findings must be verified by a human expert in accordance with Part B of the FSR Statutory Code.
 
 ## 📜 License
 This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
-

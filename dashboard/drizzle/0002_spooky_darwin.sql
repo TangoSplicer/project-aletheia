@@ -1,0 +1,1 @@
+CREATE INDEX `seal_audit_events_owner_timeline_idx` ON `seal_audit_events` (`userId`,`eventTimestamp`,`id`);

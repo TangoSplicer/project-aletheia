@@ -1,0 +1,92 @@
+# Aletheia Seal Dashboard Expansion
+
+- [x] Upgrade the dashboard to the full-stack project foundation.
+- [x] Define the trusted-key, manifest-signature, and canonicalization contract.
+- [x] Implement client-side Ed25519 manifest signature verification.
+- [x] Implement imported JSONL ledger-chain recomputation and root comparison.
+- [x] Add authenticated encrypted case persistence and immutable audit events.
+- [x] Add verification and persistence flow tests.
+- [x] Perform final security-boundary review for the backend scope.
+- [x] Deliver the completed backend hardening with the separate OAuth edge issue explicitly deferred.
+- [x] Diagnose the OAuth 403 as an upstream identity-provider edge failure and defer remediation to platform support.
+- [x] Harden backend case-storage, audit-chain, and authorization contracts.
+- [x] Add backend tests for ownership isolation, audit chaining, and invalid input rejection.
+- [x] Add authenticated ownership-isolation tests for case retrieval and audit verification.
+- [x] Document backend operational boundaries and recovery guidance.
+- [x] Add authenticated vault retrieval, local passphrase decryption, and workspace restoration.
+- [x] Add restore-flow success and wrong-passphrase tests.
+- [x] Display owner-scoped audit-chain integrity status next to each archived case.
+- [x] Add audit-status presentation tests and validate the archive build.
+- [x] Add a UI-facing audit-status mapping test for verified, review, and pending badges.
+- [x] Export owner-scoped audit-chain verification records without ciphertext or plaintext evidence.
+- [x] Perform end-to-end audit export validation, including generated-file contents and download behavior.
+- [x] Validate the real Case Archive export control and downloaded JSON through an authenticated browser session.
+- [x] Add an explicit development-only local test identity with production fail-closed guards.
+- [x] Validate the protected archive and audit export flow using the local test identity.
+- [x] Re-run automated checks and exercise the complete audit workflow end to end.
+- [x] Add a chronological owner-scoped audit timeline to the Case Archive.
+- [x] Add timeline presentation tests and validate the archive build.
+- [x] Add a Case Archive UI-facing timeline presentation test for chronological events and metadata labels.
+- [x] Add owner-scoped paginated audit retrieval for long case histories.
+- [x] Add accessible timeline pagination controls with deterministic navigation.
+- [x] Add long-history pagination tests and validate the archive build.
+- [x] Add multi-page cursor progression coverage for long owner-scoped audit histories.
+- [x] Add an interactive timeline pagination test for Older and Newer navigation.
+- [x] Re-run full validation after multi-page pagination coverage is complete.
+- [x] Add compact audit event-type/date filters without crowding the Case Archive.
+- [x] Add a jump-to-newest timeline action after background pagination refreshes.
+- [x] Add visible audit-event counts to archive records.
+- [x] Prepare an offline-first Windows desktop companion build configuration and sharing guide.
+- [x] Prepare an offline-first Android companion build configuration and sharing guide.
+- [x] Validate companion build configurations and document online/offline security boundaries.
+- [x] Add a background-refresh comparison that surfaces Newest only when unseen recent events exist.
+- [x] Return accurate per-case audit event totals from the owner-scoped archive query.
+- [x] Add filtered-result, refreshed-history, and event-total coverage before final validation.
+- [x] Gate the jump-to-newest CTA on truly unseen background-refreshed history.
+- [x] Add actual filtered-page result coverage for event type, date, and cursor progression.
+- [x] Add UI coverage that the refreshed-history CTA is hidden without unseen events and shown with them.
+- [x] Trace and document how a case is created, selected, restored, and verified across the dashboard and companion tools.
+- [x] Implement or specify verification-profile configuration for the unconfigured mobile state.
+- [x] Review the aletheia-sra-library repository for dashboard integration, security, and release readiness.
+- [x] Produce a prioritized roadmap for a fully usable hosted service, including authentication, profile trust, operations, and distribution.
+- [x] Document the offline companion record-loading workflow, rendered fields, and verification limits alongside dashboard restore.
+- [x] Cross-reference the companion build and sharing guide from the end-to-end lifecycle documentation.
+- [x] Add owner-scoped verification profiles with jurisdiction, policy version, lifecycle status, and review date.
+- [x] Add approved Ed25519 signer registrations with full key digest, practitioner identity, validity window, and revocation state.
+- [x] Evaluate manifest signatures against the active verification profile without conflating signature validity and authority.
+- [x] Replace the unconfigured verification-settings placeholder with an accessible profile-management workflow.
+- [x] Add ownership, lifecycle, authorization, and UI presentation coverage; validate the complete build.
+- [x] Preserve the verification-profile authorization outcome inside encrypted vault metadata and inspection exports.
+- [x] Add regression coverage for profile-decision persistence and exported verification records.
+- [x] Add explicit profile retirement and review-date management through protected owner-scoped procedures and settings UI.
+- [x] Add a UI-facing verification-profile dialog test covering unconfigured, active, key-register, and separate authority messaging states.
+- [x] Add vault-save and inspection-export integration coverage for persisted profile provenance and authorization decisions.
+- [x] Add workbench-level dialog coverage for the verification settings entry point, profile states, key register, and review/retirement controls.
+- [x] Add workbench-level save/export integration coverage proving profile provenance reaches encrypted vault and inspection record payloads.
+- [x] Add maker–checker approval records and two-person activation controls for profile and signer-key changes.
+- [x] Add profile version history to inspection and Case Archive verification exports.
+- [x] Audit OAuth configuration and code for production readiness while retaining fail-closed authorization.
+- [x] Add governance, export-history, and authentication regression coverage; validate the complete build.
+- [x] Add safe verification-profile version history to workbench inspection exports.
+- [x] Add inspection-export regression coverage for version history, approval metadata, and safe exclusions.
+- [x] Add an accessible dashboard badge for administrator approval requests awaiting review.
+- [x] Add badge behavior coverage for zero, pending, and actionable approval states.
+- [x] Audit the dashboard repository, deployment configuration, and tracked-file hygiene for GitHub distribution.
+- [x] Deferred at user direction: document future reviewer email notifications through a verified transactional-email provider, with delivery failure handling and audit-safe message templates.
+- [x] Add approval-request age and priority indicators without weakening maker–checker controls.
+- [x] Add a dedicated administrator approval-queue page for scalable review operations.
+- [x] Add queue filtering and workflow coverage for large approval volumes.
+- [x] Fix oldest-first approval-queue cursor pagination for later pages.
+- [x] Add multi-page server and UI coverage for queue filters and approve/reject workflow.
+- [x] Add UI coverage for priority filtering, rejection, and queue refresh behavior.
+- [x] Add a dedicated approval-queue UI interaction test for approval and refresh behavior.
+- [x] Consolidate repository documentation into a comprehensive user guide, administrator guide, launch runbook, and change history.
+- [x] Remove obsolete project artifacts and update repository metadata for GitHub distribution.
+- [x] Validate the complete release candidate and publish the current dashboard source to GitHub.
+- [x] Add GitHub repository metadata and re-run full validation after source-tree cleanup.
+- [x] Add an administrator-only CSV export for pending and completed approval requests.
+- [x] Add CSV export coverage for stable fields, spreadsheet-formula safety, and administrator authorization.
+- [x] Add a compact approval-queue search and status filter for administrators.
+- [x] Add queue search/filter coverage for matching, clearing, and empty states.
+- [x] Synchronize approval queue search and filters with validated shareable URL query parameters.
+- [x] Add URL state coverage for initialization, updates, clearing, and invalid parameter fallbacks.

@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1786712940865,
+      "tag": "0000_thin_wrecking_crew",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1786996769989,
+      "tag": "0001_medical_red_skull",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1787150980957,
+      "tag": "0002_spooky_darwin",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1787230160853,
+      "tag": "0003_gifted_serpent_society",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1787248023201,
+      "tag": "0004_yummy_norman_osborn",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1787248048533,
+      "tag": "0005_ordinary_hedge_knight",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1787322519097,
+      "tag": "0006_crazy_sleeper",
+      "breakpoints": true
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+CREATE INDEX `verification_profile_approvals_queue_idx` ON `verification_profile_approvals` (`status`,`createdAt`,`id`);
