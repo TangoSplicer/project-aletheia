@@ -1,46 +1,95 @@
-import sys
-import json
+"""Structural and SHA-256 checks for the pinned Project Aletheia SRA fixture.
+
+The companion Core Nexus `sra_validate` binary validates both BLAKE3 and SHA-256.
+This standard-library gate deliberately validates the same fixture's path, schema,
+size, and SHA-256 digest so CI fails closed when the SRA submodule or fixture is
+missing or malformed.
+"""
+
+import argparse
 import hashlib
-import os
+import json
+import logging
+import re
+import sys
+from pathlib import Path
 
-def run_sra_check(gold_image_path, expected_hash):
-    """
-    Automated Verification of Method as per ISO 17025.
-    """
-    if not os.path.exists(gold_image_path):
-        print(f"❌ Error: Gold image {gold_image_path} not found.")
-        return False
-        
-    with open(gold_image_path, "rb") as f:
-        actual_hash = hashlib.sha256(f.read()).hexdigest()
-    
-    if actual_hash == expected_hash:
-        print(f"✅ SRA Validation Passed for {gold_image_path}")
-        return True
-    else:
-        print(f"❌ SRA Validation FAILED for {gold_image_path}")
-        print(f"  Expected: {expected_hash}")
-        print(f"  Actual:   {actual_hash}")
+LOGGER = logging.getLogger("aletheia.sra_validation")
+SRA_ROOT = Path("sra-library")
+FIXTURE_MANIFEST = SRA_ROOT / "schema" / "test_sra_manifest.json"
+REQUIRED_FIELDS = (
+    "schema_version",
+    "artifact_name",
+    "artifact_path",
+    "artifact_type",
+    "verification_method",
+    "size_bytes",
+    "hashes",
+    "attestation",
+)
+HEX_DIGEST = re.compile(r"^[0-9a-fA-F]{64}$")
+
+
+def sha256_file(path: Path) -> str:
+    hasher = hashlib.sha256()
+    with path.open("rb") as artifact:
+        for block in iter(lambda: artifact.read(1024 * 1024), b""):
+            hasher.update(block)
+    return hasher.hexdigest()
+
+
+def validate_fixture(manifest_path: Path = FIXTURE_MANIFEST) -> bool:
+    try:
+        with manifest_path.open("r", encoding="utf-8") as handle:
+            manifest = json.load(handle)
+    except (OSError, json.JSONDecodeError) as error:
+        LOGGER.error("Could not load SRA fixture manifest (%s): %s", type(error).__name__, error)
         return False
 
-if __name__ == "__main__":
-    print("--- Project Aletheia: Automated Verification of Method ---")
-    
-    # Check for SRA library manifest
-    sra_manifest_path = "sra-library/schema/sra_manifest.json"
-    
-    if not os.path.exists(sra_manifest_path):
-        print(f"⚠️ SRA Library manifest not found at {sra_manifest_path}. Skipping validation.")
-        sys.exit(0)
+    missing = [field for field in REQUIRED_FIELDS if field not in manifest]
+    if missing:
+        LOGGER.error("SRA fixture manifest is missing required fields: %s", ", ".join(missing))
+        return False
+
+    hashes = manifest["hashes"]
+    if not isinstance(hashes, dict) or not all(HEX_DIGEST.fullmatch(str(hashes.get(algorithm, ""))) for algorithm in ("blake3", "sha256")):
+        LOGGER.error("SRA fixture manifest requires 64-character hexadecimal BLAKE3 and SHA-256 digests")
+        return False
 
     try:
-        with open(sra_manifest_path, 'r') as f:
-            manifest = json.load(f)
-            print(f"Loaded SRA Manifest: {manifest.get('artifact_name', 'Unknown')}")
-            # In a real scenario, we would iterate over artifacts and validate them
-            # For now, we'll just confirm the manifest is valid JSON
-            print("✅ SRA Manifest is valid.")
-            sys.exit(0)
-    except Exception as e:
-        print(f"❌ Error loading SRA manifest: {e}")
-        sys.exit(1)
+        declared_size = int(manifest["size_bytes"])
+    except (TypeError, ValueError):
+        LOGGER.error("SRA fixture manifest size_bytes must be an integer")
+        return False
+
+    root = SRA_ROOT.resolve()
+    artifact_path = (manifest_path.parent / str(manifest["artifact_path"])).resolve()
+    if root not in artifact_path.parents or not artifact_path.is_file():
+        LOGGER.error("SRA fixture artifact path is invalid or outside the SRA submodule: %s", artifact_path)
+        return False
+
+    if artifact_path.stat().st_size != declared_size:
+        LOGGER.error("SRA fixture size mismatch: expected %s, found %s", declared_size, artifact_path.stat().st_size)
+        return False
+
+    actual_sha256 = sha256_file(artifact_path)
+    if actual_sha256.lower() != hashes["sha256"].lower():
+        LOGGER.error("SRA fixture SHA-256 mismatch")
+        return False
+
+    LOGGER.info("SRA fixture structural and SHA-256 validation passed: %s", manifest["artifact_name"])
+    return True
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Validate a pinned Project Aletheia SRA fixture manifest")
+    parser.add_argument("--mode", default="gate", choices=("gate",), help="Retained for CI command compatibility")
+    parser.add_argument("--manifest", type=Path, default=FIXTURE_MANIFEST, help="Path to the SRA manifest to validate")
+    args = parser.parse_args()
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
+    LOGGER.info("Project Aletheia SRA integration validation")
+    return 0 if validate_fixture(args.manifest) else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

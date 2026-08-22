@@ -21,6 +21,14 @@ git submodule update --init --recursive
 
 Initialize and update the SRA-related components using [UPDATING_SRA_LIB.md](UPDATING_SRA_LIB.md). Run the framework validation commands documented in `VALIDATION_SCOPE.md` and the repository workflow before treating a source change as ready for review.
 
+After submodule initialization, run the deterministic parent/SRA integration gate. It validates a tracked fixture with both BLAKE3 and SHA-256, and exercises declared-digest rejection paths.
+
+```bash
+bash validation-suite/sra_integration_gate.sh
+```
+
+The current compatibility policy, supported fixture contract, and required actions for an SRA pin update are defined in [CORE_SRA_COMPATIBILITY.md](CORE_SRA_COMPATIBILITY.md).
+
 ## Aletheia Seal Desk dashboard
 
 The web dashboard is self-contained in `dashboard/`. It needs Node.js 22 or later and pnpm. For a reproducible source check, run:

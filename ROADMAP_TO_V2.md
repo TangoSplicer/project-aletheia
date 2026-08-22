@@ -144,6 +144,8 @@ Review this roadmap at each dashboard release candidate, Core Nexus method chang
 4. Define the Core Nexus/dashboard manifest and ledger compatibility matrix and add shared fixtures.
 5. Establish accountable owners for security, release, governance, storage lifecycle, and method-change evidence.
 
+The current Core Nexus/SRA Library compatibility contract and deterministic fixture gate are documented in [`docs/CORE_SRA_COMPATIBILITY.md`](docs/CORE_SRA_COMPATIBILITY.md). Dashboard interchange remains a future, separately versioned contract.
+
 ## Change log for this roadmap
 
 | Date | Change | Owner |

@@ -1,6 +1,5 @@
 use aletheia_core_nexus::hashing::{hash_file, HashAlgorithm};
 use std::fs;
-use std::io::Write;
 
 #[test]
 fn test_iso17025_hash_precision() {
@@ -10,7 +9,7 @@ fn test_iso17025_hash_precision() {
 
     let result = hash_file(test_file, HashAlgorithm::Sha256).unwrap();
     // Known SHA-256 for the string above
-    assert_eq!(result.hex_digest, "4b4f00350d75417937303023e387143e11d2c1251978255b7669676572616461");
+    assert_eq!(result.hex_digest, "2f8f19093c73a6e29c794b784f039e2b4e1e851be5ef35733df8331a058e1049");
     
     fs::remove_file(test_file).unwrap();
 }

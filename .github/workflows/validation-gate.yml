@@ -1,20 +1,26 @@
 name: Forensic Validation Gate
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches: [main]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Rust
-        uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          submodules: recursive
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
       - name: Verify Core Nexus Integrity
         run: |
           cd core-nexus
           cargo test --test hash_validation
+      - name: Verify pinned SRA integration fixture
+        run: |
+          bash validation-suite/sra_integration_gate.sh
       - name: Run SRA Consistency Check
         run: |
           python3 validation-suite/auto_validate.py --mode gate

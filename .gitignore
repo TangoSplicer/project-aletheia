@@ -1,0 +1,17 @@
+# Rust build output
+**/target/
+
+# Python bytecode and virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Dashboard dependency and build output
+dashboard/node_modules/
+dashboard/dist/
+
+# Local environment and editor artifacts
+.env
+.env.*
+.DS_Store
